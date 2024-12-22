@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Server</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 5px 0;
+        }
+        a {
+            text-decoration: none;
+            color: blue;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<h1>Files in Directory: <code th:text="${currentPath}"></code></h1>
+<ul>
+    <!-- Link to move up one directory level -->
+    <li>
+        <a th:if="${currentPath != '/'}"
+           th:href="@{/(path=${currentPath + '../'})}">.. (Up one level)</a>
+    </li>
+
+    <!-- List files and directories -->
+    <li th:each="file : ${files}">
+        <!-- Link for directories -->
+        <a th:if="${#strings.endsWith(file, '/')}"
+           th:href="@{/(path=${currentPath + file})}"
+           th:text="${file}"></a>
+
+        <!-- Link for files (downloadable) -->
+        <!--        <a th:if="${!#strings.endsWith(file, '/') && currentPath != ''}"-->
+        <!--           th:href="@{/download(path=${currentPath + '/' + file})}"-->
+        <!--           th:text="${file}"></a>-->
+
+        <!-- Link for files (downloadable) in subdirectory -->
+        <a th:if="${!#strings.endsWith(file, '/')}"
+           th:href="@{/download(path=${currentPath + file})}"
+           th:text="${file}"></a>
+    </li>
+</ul>
+</body>
+</html>
